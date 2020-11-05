@@ -1,0 +1,55 @@
+select * from customers;
+
+ID	NAME	   AGE	ADDRESS	     SALARY
+1	jhansi	   54	rayachoti    70000
+2	rani	   64	rajampeta    57000
+3	haritha	   32	Rajampet     20000
+4	sandhay	   34	chennai	     50000
+5	ravi	   67	kapada	     37000
+6	prasanthi  34	kadapa	     40000
+
+Implicit cursor:
+1.program:
+DECLARE  
+   total_rows number(2); 
+BEGIN 
+   UPDATE customers 
+   SET salary = salary + 500; 
+   IF sql%notfound THEN 
+      dbms_output.put_line('no customers selected'); 
+   ELSIF sql%found THEN 
+      total_rows := sql%rowcount;
+      dbms_output.put_line( total_rows || ' customers selected '); 
+   END IF;  
+END; 
+/    
+output:
+6 customers selected.
+PL/SQL procedure successfully completed. 
+
+Explicit cursor:
+1.program:
+DECLARE 
+   c_id customers.id%type; 
+   c_name customer.name%type; 
+   c_addr customers.address%type; 
+   CURSOR c_customers is 
+      SELECT id, name, address FROM customers; 
+BEGIN 
+   OPEN c_customers; 
+   LOOP 
+   FETCH c_customers into c_id, c_name, c_addr; 
+      EXIT WHEN c_customers%notfound; 
+      dbms_output.put_line(c_id || ' ' || c_name || ' ' || c_addr); 
+   END LOOP; 
+   CLOSE c_customers; 
+END; 
+output:
+1.jhansi   rayachoti
+2.rani	   rajampeta
+3.haritha  Rajampet 
+4.sandhay  chennai
+5.ravi      kapada
+6.prasanthi kadapa			   
+PL/SQL procedure successfully completed. 
+
